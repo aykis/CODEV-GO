@@ -2,5 +2,6 @@ Wikipedia : https://fr.wikipedia.org/wiki/Transformation_de_Fourier_rapide
 Tous les algorithmes proposés ci-dessus calculent la transformée sans aucune erreur, de par leur nature analytique. Toutefois, il existe des algorithmes qui peuvent s'accommoder d'une marge d'erreur pour accélérer les calculs. En 1999, Edelman et al. proposent une approximation à la transformée de Fourier rapide. Cette version est destinée à une mise en œuvre en parallèle.
 
 FFT en parallèle :
-https://dsp.stackexchange.com/questions/2694/algorithms-for-computing-fft-in-parallel
-https://www-n.oca.eu/dhrubaditya/research/talk_slides/jnc_talks.pdf
+http://www.fftw.org/parallel/parallel-fftw.html
+	https://dsp.stackexchange.com/questions/2694/algorithms-for-computing-fft-in-parallel
+	https://www-n.oca.eu/dhrubaditya/research/talk_slides/jnc_talks.pdf
