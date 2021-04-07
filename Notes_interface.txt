@@ -1,2 +1,24 @@
 Lancer les scripts avec une ligne de commande, avec en paramètre un fichier de données ou quoi
 -> fichier au format JSON
+Librairie à utiliser : encoding/json
+Sauvergarder les structures de données (type-results) et les valeurs correspondantes pour la valeurs images
+Donc 2 vecteurs : instants d'observations et de la fonction à visualiser (N-corps)
+json.marshal() -> crée le fichier à partir des données json
+
+
+Type results struct {
+    T []T
+    Y []T
+}
+
+    return 
+func main() {
+    t := linspace(start, stop, n) // sampling instants
+    data := [...]results{results{t, RK4(t, f1, 1)}, results{t, RK4(t, f2, 0)}}
+    //fmt.Println(data.Y[n-1] - T(math.Exp(1)))
+    jsonData, err := json.Marshal(data)
+    if err != null {
+        log.Println(err)
+    }
+    _ = ioutil.WriteFile("test.json", jsonData, 0644)
+}
