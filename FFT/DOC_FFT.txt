@@ -5,3 +5,6 @@ FFT en parallèle :
 http://www.fftw.org/parallel/parallel-fftw.html
 	https://dsp.stackexchange.com/questions/2694/algorithms-for-computing-fft-in-parallel
 	https://www-n.oca.eu/dhrubaditya/research/talk_slides/jnc_talks.pdf
+
+
+Réunion : Short time fourier transform

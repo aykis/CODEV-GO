@@ -1,0 +1,2 @@
+Lancer les scripts avec une ligne de commande, avec en paramètre un fichier de données ou quoi
+-> fichier au format JSON
