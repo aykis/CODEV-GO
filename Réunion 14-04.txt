@@ -1,0 +1,8 @@
+Livre : stephane mala p71-72, weblet tour -> expression de la fft
+FFT sur des tranches du signal (qui se chevauchent) et fenêtrage -> chronograme, fenêtre de hamming (filtré par un porte)
+Signaler aux encadrants où se trouve les codes sur github avant la prochaine réunion
+
+Application visée : s'intéresser à la programmation séquentielle
+Faire une présentation sur les concepts de programmation concurrente en GO : go routine, canaux, et l'utilisation des ressources (processeurs,...)
+
+Conserver ses sources en vu du rapport final
