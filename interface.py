@@ -1,6 +1,7 @@
 from tkinter import Tk, Label
+from tkinter.filedialog import *
 import tkinter
-#from pandas import DataFrame
+from pandas import DataFrame
 import matplotlib.pyplot as pl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #https://vincent.developpez.com/cours-tutoriels/python/tkinter/apprendre-creer-interface-graphique-tkinter-python-3/
@@ -8,9 +9,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 root = Tk() # Création de la fenêtre racine
 root.title("Codev projet n°2")
-
-canvas= tkinter.Canvas(root, width=800, height=800, bg="red")
-canvas.pack()
 
 #Affichage conventionnel d'un plot de matplotlib
 pl.plot([1,2,3,4])
@@ -32,10 +30,10 @@ data2 = {'Year': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010],
 df2 = DataFrame(data2,columns=['Year','Unemployment_Rate'])
 
 #df = data
-figure2 = plt.Figure(figsize=(5,4), dpi=100)
+figure2 = pl.Figure(figsize=(5,4), dpi=100)
 ax2 = figure2.add_subplot(111)
 line2 = FigureCanvasTkAgg(figure2, root)
-line2.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+line2.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 df2 = df2[['Year','Unemployment_Rate']].groupby('Year').sum()
 df2.plot(kind='line', legend=True, ax=ax2, color='r',marker='o', fontsize=10)
 ax2.set_title('Year Vs. Unemployment Rate')
@@ -53,9 +51,9 @@ def GetDir():
     print (dirname)
  
  
-bouton_getfiles = Button(fenetre, text="Get Files", command=GetFiles)
+bouton_getfiles = tkinter.Button(root, text="Get Files", command=GetFiles)
 bouton_getfiles.pack()
-bouton_getdir = Button(fenetre, text="Get Directory", command=GetDir)
+bouton_getdir = tkinter.Button(root, text="Get Directory", command=GetDir)
 bouton_getdir.pack()
  
 
