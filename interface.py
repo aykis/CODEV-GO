@@ -1,6 +1,6 @@
 from tkinter import Tk, Label
 import tkinter
-from pandas import DataFrame
+#from pandas import DataFrame
 import matplotlib.pyplot as pl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #https://vincent.developpez.com/cours-tutoriels/python/tkinter/apprendre-creer-interface-graphique-tkinter-python-3/
