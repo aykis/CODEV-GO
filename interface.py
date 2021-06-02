@@ -12,6 +12,7 @@ import numpy as np
 import json
 
 import interface_NCorps as NC
+import interface_FFT as FFTI
 #https://vincent.developpez.com/cours-tutoriels/python/tkinter/apprendre-creer-interface-graphique-tkinter-python-3/
 
 
@@ -19,25 +20,6 @@ import interface_NCorps as NC
 
 root = tkinter.Tk()
 root.wm_title("Projet CODEV n°2")
-
-def graph3DExemple(app):
-    #Configuration de la zone du graphique
-    fig = Figure(figsize=(5, 4), dpi=100)
-    
-    canvas = FigureCanvasTkAgg(fig, master=app)  # A tk.DrawingArea.
-    canvas.draw()
-    
-    
-    #Put the data on the graph
-    ax = fig.add_subplot(111, projection="3d")
-    t = np.arange(0, 3, .01)
-    ax.plot(t, 2 * np.sin(2 * np.pi * t))
-    
-    
-    #Toolbar configuration for the 3D graph
-    toolbar = NavigationToolbar2Tk(canvas, app)
-    toolbar.update()
-    canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
 
 #______________________________________________
@@ -80,8 +62,8 @@ def graph3DExemple(app):
 
 def FFT():
     windowFFT = tkinter.Toplevel(root)
-    windowFFT.title("Menu calcul d'une FFT")
-    buttonGetFile(windowFFT)
+    windowFFT.title("Menu : calcul d'une FFT")
+    dataFFT = FFTI.DataFFT(windowFFT)
         
 
 def NCorps():
@@ -90,7 +72,7 @@ def NCorps():
     data = NC.DataNCorps(windowNcorps)
     
     
-
+    
 
 bouton_FFT = tkinter.Button(root, text="FFT", command=FFT)
 bouton_FFT.pack()
