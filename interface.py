@@ -63,13 +63,13 @@ root.wm_title("Projet CODEV n°2")
 def FFT():
     windowFFT = tkinter.Toplevel(root)
     windowFFT.title("Menu : calcul d'une FFT")
-    dataFFT = FFTI.DataFFT(windowFFT)
+    dataFFT = FFTI.DataFFT(windowFFT, root)
         
 
 def NCorps():
     windowNcorps = tkinter.Toplevel(root)
     windowNcorps.title("Menu : calcul d'un problème à N corps")
-    data = NC.DataNCorps(windowNcorps)
+    data = NC.DataNCorps(windowNcorps, root)
     
     
     
