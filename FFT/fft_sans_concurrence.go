@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/cmplx"
@@ -46,5 +47,7 @@ func main() {
 		-9.37752132e-01, -7.24792787e-01, -3.94355855e-01, -4.89858720e-16}
 
 	test := fft(a)
-	fmt.Println(test)
+	result := json.Marshal(test)
+	fmt.Println(result)
+
 }
