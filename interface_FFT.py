@@ -29,11 +29,11 @@ class Signal():
     def getY(self):
         return self.Y
     
-    def setFreq(freq):
+    def setFreq(self, freq):
         self.freq = freq
     
-    def getFreq(t):
-        return freq[t]
+    def getFreq(self, t):
+        return self.freq[t]
 
     def getN(self):
         return len(self.Y)
@@ -74,16 +74,16 @@ class DataFFT():
         
         
         bouton_getfiles = tkinter.Button(app, text="Importer des données", command=self.getFiles)
-        bouton_saveData = tkinter.Button(app, text="Exporter les données dans un fichier", command=self.askSaveData)
+        #bouton_saveData = tkinter.Button(app, text="Exporter les données dans un fichier", command=self.askSaveData)
         bouton_askResult = tkinter.Button(app, text="Afficher un résultat", command=self.askResult)
-        bouton_execute = tkinter.Button(app, text="Executer la FFT", command=self.execute)
+        bouton_execute = tkinter.Button(app, text="Executer un script FFT", command=self.execute)
         
         #Configuration de la zone de texte
         self.dataText = tkinter.StringVar()
         self.dataLabel = tkinter.Message(app, textvariable = self.dataText)
         
         bouton_getfiles.pack()
-        bouton_saveData.pack()
+        #bouton_saveData.pack()
         bouton_askResult.pack()
         bouton_execute.pack()
         self.dataLabel.pack()
@@ -145,7 +145,6 @@ class DataFFT():
         self.ax.plot(t, self.signal.getY())
         self.canvas.draw()
         
-        
 class Result():
     
     def __init__(self, app, filename):
@@ -163,7 +162,7 @@ class Result():
         
         self.loadData(filename)
         
-        self.w = tkinter.Scale(app, from_=0, to=self.signal.getN(), orient = HORIZONTAL)
+        self.w = tkinter.Scale(app, from_=0, to=self.signal.getN(), orient = tkinter.HORIZONTAL)
         self.w.pack()
         
         self.refresh()
@@ -176,9 +175,11 @@ class Result():
                 for cle in file:
                     if cle == "Y": Y = file[cle]
                     elif cle == "pas" : pas = file[cle]
-                    elif cle == "Temps" : self.tps = file[cle]
-                    elif cle == "nombreCoeur" : self.nbCoeur = file[cle]
+                    elif cle == "Temps" : tps = file[cle]
+                    elif cle == "nombreCoeur" : nbCoeur = file[cle]
                 self.signal = Signal(pas, Y)
+                self.signal.setTemps(tps)
+                self.signal.setCoeur(nbCoeur)
         except FileNotFoundError:
             tkinter.messagebox.showerror("Error", "File not found ! There is an error, please check the path.")
         self.refresh()
