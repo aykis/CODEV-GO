@@ -1,4 +1,5 @@
 import json
+import os
 import tkinter
 
 import matplotlib.pyplot as pl
@@ -52,19 +53,20 @@ class Planete():
     def __str__(self):
         return "{0} : masse = {1}, (x,y,z) = ({2}, {3}, {4}), v(x, y, z) = ({5}, {6}, {7})".format(self.nom, self.masse, self.x[self.t], self.y[self.t], self.z[self.t], self.vx[self.t], self.vy[self.t], self.vz[self.t])
     
-    def setTemps(tps):
+    def setTemps(self, tps):
         self.tps = tps
-    def getTemps():
+    def getTemps(self):
         return self.tps
-    def setCoeur(cr):
+    def setCoeur(self, cr):
         self.nbCoeur = cr
-    def getCoeur():
+    def getCoeur(self):
         return self.nbCoeur
     
     
     def next(self):
-        if self.t < len(self.x):
-            self.t+=1
+        toadd = 60*6
+        if self.t + toadd < len(self.x):
+            self.t+=toadd
         else:
             self.t=0
         
@@ -111,16 +113,18 @@ class DataNCorps():
         bouton_newPlanete = tkinter.Button(app, text="Ajouter un corps", command=self.addPlanete)
         bouton_saveData = tkinter.Button(app, text="Exporter les données dans un fichier", command=self.askSaveData)
         bouton_resultat = tkinter.Button(app, text="Afficher un résultat", command=self.askResult)
+        bouton_executer = tkinter.Button(app, text="Executer une résolution N-corps", command=self.executer)
         
         #Configuration de la zone de texte
         self.dataText = tkinter.StringVar()
-        self.dataLabel = tkinter.Message(app, textvariable = self.dataText)
+        self.dataLabel = tkinter.Label(app, textvariable = self.dataText, width=150)
         #self.dataLabel.pack(fill=tkinter.BOTH)
         
         bouton_getfiles.pack(expand=1)
         bouton_newPlanete.pack(expand=1)
         bouton_saveData.pack(expand=1)
         bouton_resultat.pack(expand=1)
+        bouton_executer.pack(expand=1)
         self.dataLabel.pack(expand=1,fill=tkinter.BOTH)
         
         self.refresh()
@@ -156,7 +160,13 @@ class DataNCorps():
         windowNcorpsResult = tkinter.Toplevel(self.root)
         windowNcorpsResult.title("Résulat : calcul d'un problème à N corps / {0}".format(filename))
         result = Result(windowNcorpsResult, filename)
-        
+    
+    def executer(self):
+        filenameFFT = tkinter.filedialog.askopenfilename()
+        self.runGo(filenameFFT, self.filename)
+    
+    def runGo(self, filenameFFT, filenameRes):
+        print(os.system("go run " + filenameFFT + filenameRes))
     
     def loadFile(self, filename):
 
@@ -223,7 +233,12 @@ class DataNCorps():
         for planete in self.planetes:
             addPlanete(planete)
         return jsonDict
-            
+
+
+
+#===============================================================
+
+
 class Result():
     planetes = []
     
@@ -237,24 +252,32 @@ class Result():
         
         self.ax = self.fig.add_subplot(111, projection="3d")
         
+        
+        self.ax.axis(xmin = -1.5e11, xmax=1.5e11, ymin=-1.5e11, ymax=1.5e11)
+        
+        
         #Toolbar configuration for the 3D graph
         toolbar = NavigationToolbar2Tk(self.canvas, app)
         toolbar.update()
-        self.canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+        self.canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
         
         self.filename = filename
         self.loadData(filename)
         
-        ani = animation.FuncAnimation(self.fig, self.refresh, init_func=self.init, frames=100, blit=True, interval=100, repeat=False)
+        print(self.tps)
         
-        self.refresh()
-        
-    def init(self):
-        #line.set_data([],[],[])
-        #return line,
         self.pos = self.ax.scatter([0], [0], [0])
-        self.canvas.draw()
-        return self.pos
+        
+        
+        self.dataText = tkinter.StringVar()
+        self.dataLabel = tkinter.Label(app, textvariable = self.dataText, width=150)
+    
+    
+        self.dataLabel.pack()
+        
+        self.app.after(40, self.refresh())
+        
+        #self.refresh()
         
     
     def animate(self, i):
@@ -278,8 +301,8 @@ class Result():
             with open(filename) as json_file:
                 data = json.load(json_file)
                 for cle in data:
-                    if cle == "Temps" : self.planetes.setTemps(data[cle])
-                    elif cle == "nombreCoeur" : self.planetes.setCoeur(data[cle])
+                    if cle == "Temps" : self.tps = data[cle]
+                    elif cle == "nombreCoeur" : self.coeur = data[cle]
                     else:
                         x = []
                         y = []
@@ -287,9 +310,9 @@ class Result():
                         for pos in data[cle]:
                             x.append(pos[0])
                             y.append(pos[1])
-                            z.append(0)
+                            z.append(pos[2])
                         try:
-                            self.planetes.append(Planete(0, x, y, z, 0, 0, 0, planete))
+                            self.planetes.append(Planete(0, x, y, z, 0, 0, 0, cle))
                         except KeyError:
                             tkinter.messagebox.showerror("Error", "Error in the file. Please check key for N corps problem in the data file.")
         except FileNotFoundError:
@@ -304,10 +327,16 @@ class Result():
         for planete in self.planetes:
             planete.next()
         
-        #pos = self.ax.scatter(x, y, z)
-        #self.canvas.draw()
-        self.pos.set_data(x, y, z)
-        return self.pos
+        #self.canvas.delete
+        #self.pos = self.ax.scatter(x, y, z)
+        self.pos.remove()
+        self.pos = self.ax.scatter(x,y,z)
+        self.canvas.draw()
+        self.app.after(40, self.refresh())
+        
+        if self.tps != None and self.coeur != None:
+            self.dataText.set("Temps : {0} , nombre de coeur : {1}".format(self.tps, self.coeur))
+        self.dataText.set("Temps : {0}".format(self.tps))
 
 
 class FormNewPlanete(tkinter.simpledialog.Dialog):
