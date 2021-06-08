@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"math/cmplx"
+	"os"
 )
 
 func fft(a []complex128) []complex128 {
@@ -35,19 +36,47 @@ func fft(a []complex128) []complex128 {
 	}
 
 }
+func abs_fft(a []complex128) []float64 {
+	a_fft := fft(a)
+	n := len(a_fft)
+	rep := make([]float64, n)
+	for i := 0; i < n; i++ {
+		rep[i] = cmplx.Abs(a_fft[i])
+	}
+	return (rep)
+}
+func fft_freq(n int, dt float64) []float64 {
+	rep := make([]float64, n)
+	if n%2 == 0 {
+		for i := 0; i < n/2; i++ {
+			rep[i] = (float64(i) / (float64(n) * dt))
+			rep[n/2-i] = (float64(i-n/2) / (float64(n) * dt))
+		}
+	} else {
+		for i := 0; i < (n-1)/2; i++ {
+			rep[i] = (float64(i) / (float64(n) * dt))
+			rep[(n-1)/2-i+1] = (float64(i-(n-1)/2) / (float64(n) * dt))
+		}
+		rep[(n-1)/2] = (float64((n-1)/2) / (float64(n) * dt))
+	}
+	return (rep)
+}
 
 func main() {
-	a := []complex128{0.00000000e+00, 3.94355855e-01, 7.24792787e-01, 9.37752132e-01,
-		9.98716507e-01, 8.97804540e-01, 6.51372483e-01, 2.99363123e-01,
-		-1.01168322e-01, -4.85301963e-01, -7.90775737e-01, -9.68077119e-01,
-		-9.88468324e-01, -8.48644257e-01, -5.71268215e-01, -2.01298520e-01,
-		2.01298520e-01, 5.71268215e-01, 8.48644257e-01, 9.88468324e-01,
-		9.68077119e-01, 7.90775737e-01, 4.85301963e-01, 1.01168322e-01,
-		-2.99363123e-01, -6.51372483e-01, -8.97804540e-01, -9.98716507e-01,
-		-9.37752132e-01, -7.24792787e-01, -3.94355855e-01, -4.89858720e-16}
-
-	test := fft(a)
-	result := json.Marshal(test)
+	jsonFile, err := os.Open(os.Args[2])
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Successfully Opened users.json")
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+	a := []complex128{0.0, 0.1}
+	test := abs_fft(a)
+	result, err := json.Marshal(test)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println(result)
 
 }
